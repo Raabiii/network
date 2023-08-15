@@ -1,7 +1,6 @@
 package plugins.tobisch.com.network.listener;
 
 import org.bukkit.*;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,10 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import plugins.tobisch.com.network.guis.AccessoryBagGUI;
-import plugins.tobisch.com.network.guis.MenuGUI;
-import plugins.tobisch.com.network.guis.QuiverGUI;
-import plugins.tobisch.com.network.guis.TeleportGUI;
+import plugins.tobisch.com.network.guis.*;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
 import plugins.tobisch.com.network.manager.QuiverManager;
 import plugins.tobisch.com.network.skills.LevelRequirements;
@@ -61,12 +57,13 @@ public class MenuInteraction implements Listener {
 
 
         ItemStack button1 = createButton(Material.COMPASS, "§aWorlds");
+        ItemStack upgrade = createButton(Material.ANVIL, "§aUpgrade");
         ItemStack accessoryBag = createButton(Material.COMPOSTER, "§aAccessory Bag");
         ItemStack quiver = createButton(Material.ARROW, "§aQuiver");
         ItemStack close = createButton(Material.BARRIER, this.close);
         ItemStack status = createButton(Material.PLAYER_HEAD, "§aStatus");
 
-        SkullMeta skullMeta = (SkullMeta) status.getItemMeta(); // Get the created item's ItemMeta and cast it to SkullMeta so we can access the skull properties
+        SkullMeta skullMeta = (SkullMeta) status.getItemMeta();
         assert skullMeta != null;
         skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getName()));
         skullMeta.setDisplayName("§aStatus");
@@ -74,6 +71,7 @@ public class MenuInteraction implements Listener {
 
         gui.setItem(4, status);
         gui.setItem(22, button1);
+        gui.setItem(20, upgrade);
         gui.setItem(21, accessoryBag);
         gui.setItem(23, quiver);
         gui.setItem(40, close);
@@ -87,6 +85,10 @@ public class MenuInteraction implements Listener {
 
     private void openAccessoryBagGui(Player player){
         player.openInventory(this.accessoryBagManager.getInventory(player));
+    }
+
+    private void openUpgradeGUI(Player player){
+        player.openInventory(new UpgradeGUI(36, "Upgrade").getInventory());
     }
 
     private void openTeleportGui(Player player) {
@@ -116,7 +118,6 @@ public class MenuInteraction implements Listener {
 
     public void openStatus(Player player){
         Skills skills = new Skills();
-        String maxed = "§a";
         Inventory gui = Bukkit.createInventory(new TeleportGUI(), 45, "Status");
 
         ItemStack none = createButton(Material.BLACK_STAINED_GLASS_PANE, " ");
@@ -133,20 +134,22 @@ public class MenuInteraction implements Listener {
         ItemStack enchanting = skills.getEnchanting().getCurrentLevel(player) < LevelRequirements.getMax() ? createButton(Material.ENCHANTING_TABLE, "§aEnchanting " + Utils.toRoman(skills.getEnchanting().getCurrentLevel(player))) : createButton(Material.ENCHANTING_TABLE, "§6Enchanting " + Utils.toRoman(skills.getEnchanting().getCurrentLevel(player)));
         ItemStack alchemy = skills.getAlchemy().getCurrentLevel(player) < LevelRequirements.getMax() ? createButton(Material.BREWING_STAND, "§aAlchemy " + Utils.toRoman(skills.getAlchemy().getCurrentLevel(player))) : createButton(Material.BREWING_STAND, "§6Alchemy " + Utils.toRoman(skills.getAlchemy().getCurrentLevel(player)));
 
-
         ItemMeta farmingMeta = farming.getItemMeta();
         ItemMeta miningMeta = mining.getItemMeta();
         ItemMeta combatMeta = combat.getItemMeta();
 
+        assert farmingMeta != null;
         farmingMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        assert miningMeta != null;
         miningMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        assert combatMeta != null;
         combatMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         farming.setItemMeta(farmingMeta);
         mining.setItemMeta(miningMeta);
         combat.setItemMeta(combatMeta);
 
-        SkullMeta skullMeta = (SkullMeta) status.getItemMeta(); // Get the created item's ItemMeta and cast it to SkullMeta so we can access the skull properties
+        SkullMeta skullMeta = (SkullMeta) status.getItemMeta();
         assert skullMeta != null;
         skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getName()));
         skullMeta.setDisplayName(ChatColor.GREEN + player.getDisplayName() + "'s status");
@@ -186,7 +189,10 @@ public class MenuInteraction implements Listener {
             Player player = (Player) event.getWhoClicked();
             ItemStack clickedItem = event.getCurrentItem();
 
-            assert clickedItem != null;
+            if(clickedItem == null){
+                return;
+            }
+
             if (clickedItem.getType() == Material.COMPASS) {
                 this.openTeleportGui(player);
             } else if (clickedItem.getType() == Material.COMPOSTER) {
@@ -197,14 +203,16 @@ public class MenuInteraction implements Listener {
                 player.closeInventory();
             } else if (clickedItem.getType() == Material.PLAYER_HEAD) {
                 this.openStatus(player);
+            }else if (clickedItem.getType() == Material.ANVIL && "§aUpgrade".equals(Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName())) {
+                this.openUpgradeGUI(player);
             }
         }
 
-        if (event.getInventory().getHolder() instanceof QuiverGUI || event.getInventory().getHolder() instanceof AccessoryBagGUI) {
+        if (event.getInventory().getHolder() instanceof QuiverGUI ||event.getInventory().getHolder() instanceof UpgradeGUI || event.getInventory().getHolder() instanceof AccessoryBagGUI) {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
             ItemStack clickedItem = event.getCurrentItem();
-            assert clickedItem != null;
+            if(clickedItem == null ) return;
             ItemMeta arrowMeta = clickedItem.getItemMeta();
 
             Bukkit.getConsoleSender().sendMessage( Objects.requireNonNull(arrowMeta).getDisplayName() + " " + arrow);

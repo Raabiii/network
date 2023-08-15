@@ -2,6 +2,7 @@ package plugins.tobisch.com.network.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import plugins.tobisch.com.network.manager.CurrencyManager;
 import plugins.tobisch.com.network.scoreboard.MoneyScoreboard;
+
+import java.util.Objects;
 
 public class JoinListener implements Listener {
 
@@ -20,7 +23,6 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
 
         this.createCustomItem(player);
-
         new MoneyScoreboard(player, player.getWorld().getName(), currencyManager.getPlayerCurrency(player));
     }
 

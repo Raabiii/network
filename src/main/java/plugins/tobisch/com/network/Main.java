@@ -7,8 +7,9 @@ import plugins.tobisch.com.network.commands.CurrencyCommand;
 import plugins.tobisch.com.network.commands.GetLifeSaver;
 import plugins.tobisch.com.network.commands.PayCommand;
 import plugins.tobisch.com.network.listener.*;
+import plugins.tobisch.com.network.listener.talisman.NoFallDamageListener;
 import plugins.tobisch.com.network.listener.skill.*;
-import plugins.tobisch.com.network.listener.talisman.StrengthListener;
+import plugins.tobisch.com.network.listener.talisman.*;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
 import plugins.tobisch.com.network.manager.CurrencyManager;
 import plugins.tobisch.com.network.manager.QuiverManager;
@@ -86,5 +87,17 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new EnchantingListener(skills.getEnchanting()), this);
         pm.registerEvents(new AlchemyListener(skills.getAlchemy()), this);
         pm.registerEvents(new StrengthListener(), this);
+        pm.registerEvents(new ResistanceListener(), this);
+        pm.registerEvents(new SpeedListener(), this);
+        pm.registerEvents(new JumpBoostListener(), this);
+        pm.registerEvents(new HasteListener(), this);
+        pm.registerEvents(new RegenerationListener(), this);
+        pm.registerEvents(new FireResistanceListener(), this);
+        pm.registerEvents(new WaterBreathingListener(), this);
+        pm.registerEvents(new NightVisionListener(), this);
+        pm.registerEvents(new SaturationListener(), this);
+        pm.registerEvents(new ExtraHeartsListener(), this);
+        pm.registerEvents(new CoinListener(this), this);
+        pm.registerEvents(new NoFallDamageListener(), this);
     }
 }

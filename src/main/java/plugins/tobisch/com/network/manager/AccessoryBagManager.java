@@ -85,4 +85,11 @@ public class AccessoryBagManager {
         }
         return abag.get(p.getUniqueId());
     }
+
+    public AccessoryBagGUI getAccessoryGUI(UUID p){
+        if(abag.get(p) == null){
+            abag.put(p, new AccessoryBagGUI(36, "Accessory bag"));
+        }
+        return abag.get(p);
+    }
 }

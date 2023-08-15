@@ -118,4 +118,12 @@ public class CurrencyManager {
             return 0;
         }
     }
+
+    public double getPlayerCurrency(UUID p){
+        if (currency.get(p) != null){
+            return currency.get(p);
+        }else{
+            return 0;
+        }
+    }
 }

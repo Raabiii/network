@@ -11,4 +11,5 @@ public interface Talisman {
     ItemStack createArtifact();
 
     int compare(ItemStack item1);
+
 }

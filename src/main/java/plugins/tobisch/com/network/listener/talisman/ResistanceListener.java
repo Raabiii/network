@@ -12,10 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
+import plugins.tobisch.com.network.talisman.Resistance;
 import plugins.tobisch.com.network.talisman.Speed;
 import plugins.tobisch.com.network.talisman.Strength;
 
-public class StrengthListener implements Listener {
+public class ResistanceListener implements Listener {
 
     private static PotionEffect potionEffect;
 
@@ -26,26 +27,26 @@ public class StrengthListener implements Listener {
 
     public static void event(Player p, ItemStack item){
         AccessoryBagManager accessoryBagManager = new AccessoryBagManager();
-        StrengthListener strengthListener = new StrengthListener();
+        ResistanceListener resistanceListener = new ResistanceListener();
 
         if (p.getInventory().getType() == InventoryType.PLAYER) {
-            int strength = strengthListener.playerHasStrength(item);
+            int strength = resistanceListener.playerHasResistance(item);
             // Check if the player has blaze rods in their inventory
             if (strength > 0) {
-                strengthListener.applyStrengthEffect((Player) p, strength);
+                resistanceListener.applyResistanceEffect((Player) p, strength);
             }
         }
     }
 
-    private int playerHasStrength(ItemStack item) {
-        Strength strength = new Strength();
+    private int playerHasResistance(ItemStack item) {
+        Resistance resistance = new Resistance();
 
-        return strength.compare(item);
+        return resistance.compare(item);
     }
 
-    private void applyStrengthEffect(Player player, int strength) {
+    private void applyResistanceEffect(Player player, int strength) {
         if (player != null) {
-            potionEffect = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, strength, false, false);
+            potionEffect = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, strength, false, false);
             player.addPotionEffect(potionEffect);
         }
 
@@ -53,14 +54,14 @@ public class StrengthListener implements Listener {
 
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event){
-        if(new Strength().compare(event.getItemInHand())>0){
+        if(new Resistance().compare(event.getItemInHand())>0){
             stopEvent(event.getPlayer(), event.getItemInHand());
         }
     }
 
     public void stopEvent(Player p, ItemStack item){
-        if(new Strength().compare(item)>0){
-            p.removePotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 0, false, false).getType());
+        if(new Resistance().compare(item)>0){
+            p.removePotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 0, false, false).getType());
         }
     }
 
@@ -69,8 +70,8 @@ public class StrengthListener implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
 
-        if(new Strength().compare(item)>0){
-            p.removePotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 0, false, false).getType());
+        if(new Resistance().compare(item)>0){
+            p.removePotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 0, false, false).getType());
         }
     }
 }

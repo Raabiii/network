@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 
-public class Strength implements Talisman{
+public class Saturation implements Talisman{
 
     @Override
     public ItemStack createTalisman(){
@@ -26,8 +26,8 @@ public class Strength implements Talisman{
 
         SkullMeta skullMeta = (SkullMeta) lifeSaver.getItemMeta(); // Get the created item's ItemMeta and cast it to SkullMeta so we can access the skull properties
         assert skullMeta != null;
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("Mr_Kaboose")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
-        skullMeta.setDisplayName("§5§kr§r§5 Strength Talisman §kf§r");
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("foodar")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
+        skullMeta.setDisplayName("§5§kr§r§5 Saturation Talisman §kf§r");
         skullMeta.setLore(lore);
         lifeSaver.setItemMeta(skullMeta);
 
@@ -48,8 +48,8 @@ public class Strength implements Talisman{
 
         SkullMeta skullMeta = (SkullMeta) lifeSaver.getItemMeta(); // Get the created item's ItemMeta and cast it to SkullMeta so we can access the skull properties
         assert skullMeta != null;
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("Mr_Kaboose")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
-        skullMeta.setDisplayName("§6§kr§r§6 Strength Ring §kf§r");
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("foodar")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
+        skullMeta.setDisplayName("§6§kr§r§6 Saturation Ring §kf§r");
         skullMeta.setLore(lore);
         lifeSaver.setItemMeta(skullMeta);
 
@@ -70,8 +70,8 @@ public class Strength implements Talisman{
 
         SkullMeta skullMeta = (SkullMeta) lifeSaver.getItemMeta(); // Get the created item's ItemMeta and cast it to SkullMeta so we can access the skull properties
         assert skullMeta != null;
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("Mr_Kaboose")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
-        skullMeta.setDisplayName("§d§kr§r§d Strength Artifact §kf§r");
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("foodar")); // Set the skull's owner so it will adapt the skin of the provided username (case sensitive).
+        skullMeta.setDisplayName("§d§kr§r§d Saturation Artifact §kf§r");
         skullMeta.setLore(lore);
         lifeSaver.setItemMeta(skullMeta);
 
@@ -91,11 +91,11 @@ public class Strength implements Talisman{
         assert meta1 != null;
         assert meta2 != null;
         if (meta1.hasDisplayName() != meta2.hasDisplayName()) return -1;
-        if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Strength Talisman") ){
+        if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Saturation Talisman") ){
             return 1;
-        } else if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Strength Ring") ) {
+        } else if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Saturation Ring") ) {
             return 2;
-        } else if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Strength Artifact") )
+        } else if (meta1.hasDisplayName() && meta1.getDisplayName().contains("Saturation Artifact") )
             return 3;
 
         return -1;
