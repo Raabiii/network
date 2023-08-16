@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import plugins.tobisch.com.network.Main;
 import plugins.tobisch.com.network.scoreboard.MoneyScoreboard;
 import plugins.tobisch.com.network.utils.Utils;
 
@@ -93,17 +92,26 @@ public class CurrencyManager {
 
     }
 
-    public boolean removeCurrencyFromPlayer(OfflinePlayer p, double amount){
+    public void removeCurrencyFromPlayer(OfflinePlayer p, double amount){
         if(currency.get(p.getUniqueId()) != null){
             if(currency.get(p.getUniqueId())-amount < 0 ){
-                return false;
+                return;
             }
             currency.put(p.getUniqueId(), currency.get(p.getUniqueId()) - amount);
             setScoreboard((Player)p, ChatColor.GOLD.toString() + Utils.formatMoney(currency.get(p.getUniqueId()))+ " €");
-            return true;
         }
 
-        return false;
+    }
+
+    public void removeCurrencyFromPlayer(UUID p, double amount){
+        if(currency.get(p) != null){
+            if(currency.get(p)-amount < 0 ){
+                return;
+            }
+            currency.put(p, currency.get(p) - amount);
+            setScoreboard((Player) Bukkit.getOfflinePlayer(p), ChatColor.GOLD.toString() + Utils.formatMoney(currency.get(p))+ " €");
+        }
+
     }
 
     public void setPlayerCurrency(OfflinePlayer p, double amount){

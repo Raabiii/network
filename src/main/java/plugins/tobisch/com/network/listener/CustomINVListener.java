@@ -83,14 +83,11 @@ public class CustomINVListener implements Listener {
 
         if (topInventory.getHolder() instanceof UpgradeGUI){
             event.setCancelled(false);
-            Bukkit.getConsoleSender().sendMessage("out");
             if (item != null)
                 if(item.getType() == Material.ANVIL){
                     ItemStack oldItem = topInventory.getItem(21);
                     if (oldItem == null) return;
                     HumanEntity player = event.getWhoClicked();
-
-                    //for equipment upgrade
 
                     if (oldItem.getItemMeta() == null) return;
 
@@ -98,19 +95,26 @@ public class CustomINVListener implements Listener {
                         if(currencyManager.getPlayerCurrency(player.getUniqueId()) >= 1000000) {
                             topInventory.setItem(23, Utils.upgrade(oldItem, Utils.getStage(oldItem)));
                             topInventory.setItem(21, null);
+                            currencyManager.removeCurrencyFromPlayer(player.getUniqueId(), 10000000);
+                            player.sendMessage("§aYou have bought a " + topInventory.getItem(23).getItemMeta().getDisplayName() + " for §6" + plugins.tobisch.com.network.utils.Utils.formatMoney(1000000) + "€");
                         }else{
                             player.sendMessage("§4You have not enough money. You need §6" + 1000000 + "€");
                         }
-
+                    }else{
+                        player.sendMessage("§4You do not have the required item or maybe you need even more :)");
                     }
 
-                    if(oldItem.getItemMeta().getDisplayName().contains("Ring") && Utils.hasEveryRing(event.getView().getBottomInventory(), accessoryBagManager.getAccessoryGUI(player.getUniqueId()))){
+                    if(oldItem.getItemMeta().getDisplayName().contains("Ring") && Utils.hasEveryRing(event.getView().getBottomInventory(), accessoryBagManager.getAccessoryGUI(player.getUniqueId()), item)){
                         if(currencyManager.getPlayerCurrency(player.getUniqueId()) >= 10000000) {
                             topInventory.setItem(23, Utils.upgrade(oldItem, Utils.getStage(oldItem)));
                             topInventory.setItem(21, null);
+                            currencyManager.removeCurrencyFromPlayer(player.getUniqueId(), 10000000);
+                            player.sendMessage("§aYou have bought a " + topInventory.getItem(23).getItemMeta().getDisplayName() + " for §6" + plugins.tobisch.com.network.utils.Utils.formatMoney(10000000) + "€");
                         }else{
                             player.sendMessage("§4You have not enough money. You need §6" + 10000000 + "€");
                         }
+                    }else  {
+                        player.sendMessage("§4You do not have the required item or maybe you need even more :)");
                     }
                 }
 

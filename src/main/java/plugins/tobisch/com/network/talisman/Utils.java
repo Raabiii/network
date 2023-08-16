@@ -13,13 +13,17 @@ public class Utils {
            new LifeSaver(), new Coin(), new ExtraHearts(), new FireResistance(), new Haste(), new JumpBoost(), new NightVision(), new NoFallDamage(), new Regeneration(), new Resistance(), new Saturation(), new Speed(), new Strength(), new WaterBreathing()
     };
 
-    public static boolean hasEveryRing(Inventory inv, AccessoryBagGUI bag){
+    public static boolean hasEveryRing(Inventory inv, AccessoryBagGUI bag, ItemStack currentlyUpgrading){
         ArrayList<Talisman> talismanLeft = new ArrayList<>();
         Collections.addAll(talismanLeft, talismans);
         Iterator<Talisman> i = talismanLeft.iterator();
 
         while (i.hasNext()){
             Talisman next = i.next();
+            if(next.compare(currentlyUpgrading)>1){
+                continue;
+            }
+
             if(compareInventory(next, inv) > 1){
                 i.remove();
                 continue;
@@ -29,6 +33,8 @@ public class Utils {
                 i.remove();
             }
         }
+
+        Bukkit.getConsoleSender().sendMessage(talismanLeft.toString());
 
         return talismanLeft.size() == 0;
     }
