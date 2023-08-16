@@ -15,11 +15,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugins.tobisch.com.network.guis.*;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
+import plugins.tobisch.com.network.manager.CompactorManager;
 import plugins.tobisch.com.network.manager.QuiverManager;
 import plugins.tobisch.com.network.skills.LevelRequirements;
 import plugins.tobisch.com.network.skills.Skills;
 import plugins.tobisch.com.network.utils.Utils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MenuInteraction implements Listener {
@@ -28,6 +31,7 @@ public class MenuInteraction implements Listener {
 
     private final QuiverManager quiverManager;
     private final AccessoryBagManager accessoryBagManager;
+    private final CompactorManager compactorManager = new CompactorManager();
 
     public MenuInteraction(QuiverManager quiverManager, AccessoryBagManager accessoryBagManager){
         this.quiverManager = quiverManager;
@@ -62,6 +66,7 @@ public class MenuInteraction implements Listener {
         ItemStack quiver = createButton(Material.ARROW, "§aQuiver");
         ItemStack close = createButton(Material.BARRIER, this.close);
         ItemStack status = createButton(Material.PLAYER_HEAD, "§aStatus");
+        ItemStack compacter = createButton(Material.DISPENSER, "§aCompacter");
 
         SkullMeta skullMeta = (SkullMeta) status.getItemMeta();
         assert skullMeta != null;
@@ -70,10 +75,11 @@ public class MenuInteraction implements Listener {
         status.setItemMeta(skullMeta);
 
         gui.setItem(4, status);
-        gui.setItem(22, button1);
         gui.setItem(20, upgrade);
         gui.setItem(21, accessoryBag);
+        gui.setItem(22, button1);
         gui.setItem(23, quiver);
+        gui.setItem(24, compacter);
         gui.setItem(40, close);
 
         player.openInventory(gui);
@@ -85,6 +91,10 @@ public class MenuInteraction implements Listener {
 
     private void openAccessoryBagGui(Player player){
         player.openInventory(this.accessoryBagManager.getInventory(player));
+    }
+
+    private void openCompacterGUI(Player player){
+        player.openInventory(this.compactorManager.getInventory(player));
     }
 
     private void openUpgradeGUI(Player player){
@@ -137,17 +147,37 @@ public class MenuInteraction implements Listener {
         ItemMeta farmingMeta = farming.getItemMeta();
         ItemMeta miningMeta = mining.getItemMeta();
         ItemMeta combatMeta = combat.getItemMeta();
+        ItemMeta foragingMeta = foraging.getItemMeta();
+        ItemMeta fishingMeta = fishing.getItemMeta();
+        ItemMeta enchantingMeta = enchanting.getItemMeta();
+        ItemMeta alchemyMeta = alchemy.getItemMeta();
+
 
         assert farmingMeta != null;
         farmingMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        farmingMeta.setLore(List.of(skills.getFarming().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getFarming().getCurrentLevel(player))));
         assert miningMeta != null;
+        miningMeta.setLore(List.of(skills.getMining().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getMining().getCurrentLevel(player))));
         miningMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         assert combatMeta != null;
+        combatMeta.setLore(List.of(skills.getCombat().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getCombat().getCurrentLevel(player))));
         combatMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        assert foragingMeta != null;
+        foragingMeta.setLore(List.of(skills.getForaging().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getForaging().getCurrentLevel(player))));
+        assert fishingMeta != null;
+        fishingMeta.setLore(List.of(skills.getFishing().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getFishing().getCurrentLevel(player))));
+        assert enchantingMeta != null;
+        enchantingMeta.setLore(List.of(skills.getEnchanting().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getEnchanting().getCurrentLevel(player))));
+        assert alchemyMeta != null;
+        alchemyMeta.setLore(List.of(skills.getAlchemy().getCurrentAmount(player) + "/" + LevelRequirements.level(skills.getAlchemy().getCurrentLevel(player))));
 
         farming.setItemMeta(farmingMeta);
         mining.setItemMeta(miningMeta);
         combat.setItemMeta(combatMeta);
+        foraging.setItemMeta(foragingMeta);
+        fishing.setItemMeta(fishingMeta);
+        enchanting.setItemMeta(enchantingMeta);
+        alchemy.setItemMeta(alchemyMeta);
 
         SkullMeta skullMeta = (SkullMeta) status.getItemMeta();
         assert skullMeta != null;
@@ -203,19 +233,19 @@ public class MenuInteraction implements Listener {
                 player.closeInventory();
             } else if (clickedItem.getType() == Material.PLAYER_HEAD) {
                 this.openStatus(player);
+            } else if (clickedItem.getType() == Material.DISPENSER) {
+                this.openCompacterGUI(player);
             }else if (clickedItem.getType() == Material.ANVIL && "§aUpgrade".equals(Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName())) {
                 this.openUpgradeGUI(player);
             }
         }
 
-        if (event.getInventory().getHolder() instanceof QuiverGUI ||event.getInventory().getHolder() instanceof UpgradeGUI || event.getInventory().getHolder() instanceof AccessoryBagGUI) {
+        if (event.getInventory().getHolder() instanceof QuiverGUI || event.getInventory().getHolder() instanceof CompacterGUI ||event.getInventory().getHolder() instanceof UpgradeGUI || event.getInventory().getHolder() instanceof AccessoryBagGUI) {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
             ItemStack clickedItem = event.getCurrentItem();
             if(clickedItem == null ) return;
             ItemMeta arrowMeta = clickedItem.getItemMeta();
-
-            Bukkit.getConsoleSender().sendMessage( Objects.requireNonNull(arrowMeta).getDisplayName() + " " + arrow);
 
             if (clickedItem.getType() == Material.ARROW && Objects.requireNonNull(arrowMeta).getDisplayName().equals(arrow)) {
                 openCustomGUI(player);
@@ -227,9 +257,7 @@ public class MenuInteraction implements Listener {
         if (event.getInventory().getHolder() instanceof TeleportGUI) {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
-            Bukkit.getConsoleSender().sendMessage("§4" + player.getName());
             ItemStack clickedItem = event.getCurrentItem();
-            Bukkit.getConsoleSender().sendMessage(clickedItem + "");
             assert clickedItem != null;
             ItemMeta arrowMeta = clickedItem.getItemMeta();
 

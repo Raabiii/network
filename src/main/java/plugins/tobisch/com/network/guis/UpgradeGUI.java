@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.Bukkit;
 
+import java.util.LinkedList;
+
 public class UpgradeGUI implements org.bukkit.inventory.InventoryHolder {
     private final Inventory inventory;
 
@@ -13,6 +15,15 @@ public class UpgradeGUI implements org.bukkit.inventory.InventoryHolder {
         this.inventory = Bukkit.createInventory(this, size, title);
         ItemStack none = createButton(Material.BLACK_STAINED_GLASS_PANE, " ");
         ItemStack info = createButton(Material.DARK_OAK_SIGN, "§aInfo");
+
+        ItemMeta infoMeta = info.getItemMeta();
+        LinkedList<String> upgrades = new LinkedList<>();
+        upgrades.add("");
+        upgrades.add("§6Legendary   §41.000.000€");
+        upgrades.add("§dMythic        §410.000.000€");
+        infoMeta.setLore(upgrades);
+        info.setItemMeta(infoMeta);
+
 
         for(int i = 0;i<36;i++)
             this.inventory.setItem(i, none);

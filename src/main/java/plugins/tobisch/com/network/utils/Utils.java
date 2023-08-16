@@ -2,10 +2,16 @@ package plugins.tobisch.com.network.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
 public class Utils {
@@ -56,5 +62,16 @@ public class Utils {
             }
         }
         return result.toString();
+    }
+
+    public static ItemStack createEnchanted(Material type, String name){
+        ItemStack button = new ItemStack(type);
+        ItemMeta meta = button.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName(name);
+        meta.addEnchant(Enchantment.DURABILITY, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        button.setItemMeta(meta);
+        return button;
     }
 }

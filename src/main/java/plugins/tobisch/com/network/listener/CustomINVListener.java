@@ -2,14 +2,19 @@ package plugins.tobisch.com.network.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import plugins.tobisch.com.network.guis.AccessoryBagGUI;
+import plugins.tobisch.com.network.guis.CompacterGUI;
 import plugins.tobisch.com.network.guis.QuiverGUI;
 import plugins.tobisch.com.network.guis.UpgradeGUI;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
@@ -17,6 +22,7 @@ import plugins.tobisch.com.network.manager.CurrencyManager;
 import plugins.tobisch.com.network.talisman.Talisman;
 import plugins.tobisch.com.network.talisman.Utils;
 
+import java.util.List;
 import java.util.Objects;
 
 public class CustomINVListener implements Listener {
@@ -46,6 +52,29 @@ public class CustomINVListener implements Listener {
 
         if (topInventory.getHolder() instanceof AccessoryBagGUI){
             event.setCancelled(false);
+            if(item != null)
+                if (!(item instanceof Talisman)){
+                    event.setCancelled(true);
+                }
+        }
+
+        if (topInventory.getHolder() instanceof CompacterGUI){
+            int id = event.getRawSlot();
+            if(id<9 || id>17) return;
+            event.setCancelled(false);
+            ItemMeta meta = Objects.requireNonNull(topInventory.getItem(id)).getItemMeta();
+            if( Objects.requireNonNull(Objects.requireNonNull(topInventory.getItem(id)).getItemMeta()).hasEnchant(Enchantment.DURABILITY)){
+                assert meta != null;
+                meta.removeEnchant(Enchantment.DURABILITY);
+                meta.setLore(List.of("§4Deactivate"));
+            }else {
+                assert meta != null;
+                meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                meta.setLore(List.of("§aActivate"));
+            }
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            topInventory.getItem(id).setItemMeta(meta);
+
             if(item != null)
                 if (!(item instanceof Talisman)){
                     event.setCancelled(true);

@@ -11,6 +11,7 @@ import plugins.tobisch.com.network.listener.talisman.NoFallDamageListener;
 import plugins.tobisch.com.network.listener.skill.*;
 import plugins.tobisch.com.network.listener.talisman.*;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
+import plugins.tobisch.com.network.manager.CompactorManager;
 import plugins.tobisch.com.network.manager.CurrencyManager;
 import plugins.tobisch.com.network.manager.QuiverManager;
 import plugins.tobisch.com.network.skills.Skills;
@@ -26,8 +27,9 @@ public final class Main extends JavaPlugin {
         QuiverManager quiverManager = new QuiverManager();
         AccessoryBagManager accessoryBagManager = new AccessoryBagManager();
         Skills skills = new Skills();
+        CompactorManager compactorManager = new CompactorManager();
 
-        registerManagers(currencyManager, quiverManager, accessoryBagManager, skills);
+        registerManagers(currencyManager, quiverManager, accessoryBagManager, skills, compactorManager);
         registerCommands();
         registerListeners(currencyManager,  quiverManager, accessoryBagManager, skills);
     }
@@ -36,7 +38,9 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         CurrencyManager currencyManager = new CurrencyManager();
         Skills skills = new Skills();
+        CompactorManager compactorManager = new CompactorManager();
         skills.saveSkill();
+        compactorManager.saveAccessoryBag();
 
         try {
             currencyManager.saveCurrencyFile();
@@ -50,7 +54,7 @@ public final class Main extends JavaPlugin {
         accessoryBagManager.saveAccessoryBag();
     }
 
-    public void registerManagers(CurrencyManager currencyManager, QuiverManager quiverManager, AccessoryBagManager accessoryBagManager, Skills skills){
+    public void registerManagers(CurrencyManager currencyManager, QuiverManager quiverManager, AccessoryBagManager accessoryBagManager, Skills skills, CompactorManager compactorManager){
         try {
             currencyManager.loadCurrencyFile();
         } catch (IOException | ClassNotFoundException e) {
@@ -60,6 +64,7 @@ public final class Main extends JavaPlugin {
         quiverManager.loadPlayerInventories();
         accessoryBagManager.loadAccessoryBag();
         skills.loadSkill();
+        compactorManager.loadAccessoryBag();
     }
 
     public void registerCommands(){
@@ -99,5 +104,6 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new ExtraHeartsListener(), this);
         pm.registerEvents(new CoinListener(this), this);
         pm.registerEvents(new NoFallDamageListener(), this);
+        pm.registerEvents(new CompacterListener(), this);
     }
 }
