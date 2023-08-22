@@ -6,10 +6,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugins.tobisch.com.network.commands.CurrencyCommand;
 import plugins.tobisch.com.network.commands.GetLifeSaver;
 import plugins.tobisch.com.network.commands.PayCommand;
+import plugins.tobisch.com.network.commands.SetVillager;
 import plugins.tobisch.com.network.listener.*;
 import plugins.tobisch.com.network.listener.talisman.NoFallDamageListener;
 import plugins.tobisch.com.network.listener.skill.*;
 import plugins.tobisch.com.network.listener.talisman.*;
+import plugins.tobisch.com.network.listener.villager.CompactorVillagerListener;
+import plugins.tobisch.com.network.listener.villager.SpawnEggVillagerListener;
+import plugins.tobisch.com.network.listener.villager.TalismanVillagerListener;
 import plugins.tobisch.com.network.manager.AccessoryBagManager;
 import plugins.tobisch.com.network.manager.CompactorManager;
 import plugins.tobisch.com.network.manager.CurrencyManager;
@@ -71,6 +75,7 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(getCommand("life-saver")).setExecutor(new GetLifeSaver());
         Objects.requireNonNull(getCommand("currency")).setExecutor(new CurrencyCommand(this));
         Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand(this));
+        Objects.requireNonNull(getCommand("villager")).setExecutor(new SetVillager(this));
     }
 
     public void registerListeners(CurrencyManager currencyManager, QuiverManager quiverManager, AccessoryBagManager accessoryBagGUI, Skills skills){
@@ -102,8 +107,10 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new NightVisionListener(), this);
         pm.registerEvents(new SaturationListener(), this);
         pm.registerEvents(new ExtraHeartsListener(), this);
-        pm.registerEvents(new CoinListener(this), this);
         pm.registerEvents(new NoFallDamageListener(), this);
         pm.registerEvents(new CompacterListener(), this);
+        pm.registerEvents(new TalismanVillagerListener(), this);
+        pm.registerEvents(new CompactorVillagerListener(), this);
+        pm.registerEvents(new SpawnEggVillagerListener(), this);
     }
 }

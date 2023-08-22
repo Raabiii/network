@@ -20,6 +20,10 @@ public class Foraging {
     private static HashMap<UUID, Integer> currentAmount = new HashMap<>();
     private static CurrencyManager currencyManager = new CurrencyManager();
 
+    public void setLevel(Player p, int newLevel){
+        level.put(p.getUniqueId(), newLevel);
+    }
+
     public void addAmount(Player p, int amount){
         level.putIfAbsent(p.getUniqueId(), 1);
         currentAmount.putIfAbsent(p.getUniqueId(), 0);

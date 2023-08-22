@@ -34,6 +34,10 @@ public class Mining {
         sendActionBar(p, "§3+ " + amount + " Mining: " + getCurrentAmount(p) + "/" + LevelRequirements.level(getCurrentLevel(p)) + " (" + (getCurrentAmount(p)*100)/LevelRequirements.level(getCurrentLevel(p)) + "%)");
     }
 
+    public void setLevel(Player p, int newLevel){
+        level.put(p.getUniqueId(), newLevel);
+    }
+
     private void sendActionBar(Player player, String message){
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
     }

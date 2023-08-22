@@ -13,3 +13,6 @@ commands:
   pay:
     permission:
       network.command.pay
+  villager:
+    permission:
+      network.command.currency

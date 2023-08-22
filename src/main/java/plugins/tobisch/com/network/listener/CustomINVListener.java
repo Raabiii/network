@@ -60,8 +60,10 @@ public class CustomINVListener implements Listener {
 
         if (topInventory.getHolder() instanceof CompacterGUI){
             int id = event.getRawSlot();
-            if(id<9 || id>17) return;
+            Bukkit.getConsoleSender().sendMessage(id + "");
+            if(id<9 || id>35) return;
             event.setCancelled(false);
+            if(topInventory.getItem(id) == null)return;
             ItemMeta meta = Objects.requireNonNull(topInventory.getItem(id)).getItemMeta();
             if( Objects.requireNonNull(Objects.requireNonNull(topInventory.getItem(id)).getItemMeta()).hasEnchant(Enchantment.DURABILITY)){
                 assert meta != null;

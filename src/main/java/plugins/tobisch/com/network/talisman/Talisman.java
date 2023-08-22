@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Objects;
 
 public interface Talisman {
+    String name = "";
     ItemStack createTalisman();
     ItemStack createRing();
     ItemStack createArtifact();

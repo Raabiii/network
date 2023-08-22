@@ -13,23 +13,21 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import plugins.tobisch.com.network.skills.Skills;
 import plugins.tobisch.com.network.talisman.*;
+import plugins.tobisch.com.network.utils.Utils;
 
 public class GetLifeSaver implements CommandExecutor {
+    private Skills skills = new Skills();
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         @SuppressWarnings("deprecation")
         OfflinePlayer p = Bukkit.getOfflinePlayer(sender.getName());
-        ItemStack enchantedCobblestone = new ItemStack(Material.COBBLESTONE);
+        ItemStack enchantedCobblestone = Utils.createEnchanted(Material.GOLD_INGOT, "§aEnchanted Gold");
 
         // Apply the enchanted glint effect using BlockStateMeta
-        ItemMeta itemMeta = enchantedCobblestone.getItemMeta();
-        itemMeta.addEnchant(Enchantment.DURABILITY, 1, true); // Enchant with DURABILITY for the glint effect
-        itemMeta.setDisplayName("Enchanted Cobblestone");
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        enchantedCobblestone.setItemMeta(itemMeta);
-        // Add lore or other attributes if desired
-        enchantedCobblestone.setItemMeta(itemMeta);
+        skills.getMining().setLevel((Player) p, 30);
+        enchantedCobblestone.setAmount(512);
 
         ((Player)p).getInventory().addItem(enchantedCobblestone);
         LifeSaver lifeSaver = new LifeSaver();
@@ -44,7 +42,6 @@ public class GetLifeSaver implements CommandExecutor {
         NightVision nightVision = new NightVision();
         Saturation saturation = new Saturation();
         ExtraHearts extraHearts = new ExtraHearts();
-        Coin coin = new Coin();
         NoFallDamage noFallDamage = new NoFallDamage();
 
         ((Player)p).getInventory().addItem(lifeSaver.createRing());
@@ -58,7 +55,6 @@ public class GetLifeSaver implements CommandExecutor {
         ((Player)p).getInventory().addItem(nightVision.createRing());
         ((Player)p).getInventory().addItem(saturation.createRing());
         ((Player)p).getInventory().addItem(extraHearts.createRing());
-        ((Player)p).getInventory().addItem(coin.createRing());
         ((Player)p).getInventory().addItem(noFallDamage.createRing());
         ((Player)p).getInventory().addItem(waterBreathing.createRing());
 

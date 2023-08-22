@@ -50,7 +50,7 @@ public class CompactorManager {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         for (String key : config.getKeys(false)) {
-            CompacterGUI temp = new CompacterGUI(27, "Compactor");
+            CompacterGUI temp = new CompacterGUI(45, "Compactor");
             UUID playerId = UUID.fromString(key);
 
             ConfigurationSection inventorySection = Objects.requireNonNull(config.getConfigurationSection(key)).getConfigurationSection("inventory");
@@ -67,28 +67,28 @@ public class CompactorManager {
 
     public Inventory getInventory(Player p){
         if(abag.get(p.getUniqueId()) == null){
-            abag.put(p.getUniqueId(), new CompacterGUI(27, "Compactor"));
+            abag.put(p.getUniqueId(), new CompacterGUI(45, "Compactor"));
         }
         return abag.get(p.getUniqueId()).getInventory();
     }
 
     public Inventory getInventory(UUID p){
         if(abag.get(p) == null){
-            abag.put(p, new CompacterGUI(27, "Compactor"));
+            abag.put(p, new CompacterGUI(45, "Compactor"));
         }
         return abag.get(p).getInventory();
     }
 
     public CompacterGUI getAccessoryGUI(Player p){
         if(abag.get(p.getUniqueId()) == null){
-            abag.put(p.getUniqueId(), new CompacterGUI(27, "Compactor"));
+            abag.put(p.getUniqueId(), new CompacterGUI(45, "Compactor"));
         }
         return abag.get(p.getUniqueId());
     }
 
     public CompacterGUI getAccessoryGUI(UUID p){
         if(abag.get(p) == null){
-            abag.put(p, new CompacterGUI(27, "Compactor"));
+            abag.put(p, new CompacterGUI(45, "Compactor"));
         }
         return abag.get(p);
     }

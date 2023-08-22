@@ -10,8 +10,12 @@ import java.util.*;
 
 public class Utils {
     private static Talisman[] talismans= {
-           new LifeSaver(), new Coin(), new ExtraHearts(), new FireResistance(), new Haste(), new JumpBoost(), new NightVision(), new NoFallDamage(), new Regeneration(), new Resistance(), new Saturation(), new Speed(), new Strength(), new WaterBreathing()
+           new LifeSaver(), new ExtraHearts(), new FireResistance(), new Haste(), new JumpBoost(), new NightVision(), new NoFallDamage(), new Regeneration(), new Resistance(), new Saturation(), new Speed(), new Strength(), new WaterBreathing()
     };
+
+    public static Talisman[] getTalismans(){
+        return talismans;
+    }
 
     public static boolean hasEveryRing(Inventory inv, AccessoryBagGUI bag, ItemStack currentlyUpgrading){
         ArrayList<Talisman> talismanLeft = new ArrayList<>();

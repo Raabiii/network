@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import plugins.tobisch.com.network.guis.CompacterGUI;
 import plugins.tobisch.com.network.manager.CompactorManager;
 import plugins.tobisch.com.network.utils.Utils;
 
@@ -24,106 +25,140 @@ public class CompacterListener implements Listener {
         Player p = event.getPlayer();
         String name = "";
         boolean active = false;
+        int amount = 128;
+        CompacterGUI gui = compactorManager.getAccessoryGUI(p);
 
         switch (type) {
             case COBBLESTONE -> {
                 name = "Cobblestone";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(9)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case ACACIA_LOG -> {
                 name = "Acacia Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case BIRCH_LOG -> {
                 name = "Birch Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case CHERRY_LOG -> {
                 name = "Cherry Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case DARK_OAK_LOG -> {
                 name = "Dark Oak Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case JUNGLE_LOG -> {
                 name = "Jungle Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case MANGROVE_LOG -> {
                 name = "Mangrove Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case OAK_LOG -> {
                 name = "Oak Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case SPRUCE_LOG -> {
                 name = "Spruce Log";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(10)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case WHEAT -> {
                 name = "Wheat";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(11)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case CARROT -> {
                 name = "Carrot";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(12)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case POTATO -> {
                 name = "Potato";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(13)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case NETHER_WART -> {
                 name = "Nether Wart";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(14)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case PUMPKIN -> {
                 name = "Pumpkin";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(15)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case BEETROOT -> {
                 name = "Beetroot";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(16)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
             case SWEET_BERRIES -> {
                 name = "Sweet Berries";
-                if(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(compactorManager.getAccessoryGUI(p).getInventory().getItem(17)).getItemMeta()).getLore()).contains("§aActivate")) active = true;
             }
+            case BLAZE_POWDER -> {
+                name = "Blaze Powder";
+            }
+            case BLAZE_ROD -> {
+                amount = 64;
+                name = "Blaze Powder";
+            }
+            case IRON_INGOT -> {
+                name = "Iron Ingot";
+            }
+            case SUGAR_CANE -> {
+                name = "Sugar Cane";
+            }
+            case GOLD_INGOT -> {
+                name = "Gold Ingot";
+            }
+            case RABBIT_FOOT -> {
+                name = "Rabbit Foot";
+            }
+            case FEATHER -> {
+                name = "Feather";
+            }
+            case GHAST_TEAR -> {
+                name = "Ghast Tear";
+            }
+            case MAGMA_CREAM -> {
+                name = "Magma Cream";
+            }
+            case PUFFERFISH -> {
+                name = "Pufferfisch";
+            }
+            case MELON_SLICE -> {
+                name = "Melon Slice";
+            }
+
             default -> {
                 return;
             }
         }
 
+        if(gui.isActivated(name.toLowerCase())) active = true;
+
         if(!active) return;
 
-        if(checkIfPlayerHas2Stacks(item, inv)){
-            removeItems(item, p);
-            p.getInventory().addItem(Utils.createEnchanted(item.getType(), "§aEnchanted " + name));
+        if(checkIfPlayerHasItem(item, inv, amount)){
+            removeItems(item, p, amount);
+            if(item.getType() != Material.BLAZE_ROD)
+                p.getInventory().addItem(Utils.createEnchanted(item.getType(), "§aEnchanted " + name));
+            else
+                p.getInventory().addItem(Utils.createEnchanted(Material.BLAZE_POWDER, "§aEnchanted " + name));
+
         }
 
     }
 
-    private boolean checkIfPlayerHas2Stacks(ItemStack item, Inventory inv){
+    private boolean checkIfPlayerHasItem(ItemStack item, Inventory inv, int amount){
         int number = 0;
+        Bukkit.getConsoleSender().sendMessage(item.getType().name());
         for(ItemStack element: inv.getContents()){
-            if(element != null && element.getType() == item.getType() && !element.getItemMeta().getDisplayName().contains("§4Enchanted")){
+            if(element ==null) continue;
+            if(element != null && element.getType() == item.getType() && !(element.getItemMeta().getDisplayName().contains("Enchanted"))){
                 number+= element.getAmount();
             }
         }
 
-        Bukkit.getConsoleSender().sendMessage(number + "");
 
-        return number >= 128;
+        return number >= amount;
     }
 
-    private void removeItems(ItemStack item, Player p){
+    private void removeItems(ItemStack item, Player p, int amount){
         int itemsRemoved = 0;
 
-        for (ItemStack element: p.getInventory().getContents()){
-            if (element !=null && item.getType() == element.getType() && !(element.getItemMeta().getDisplayName().contains("Enchanted")) && itemsRemoved <=128){
-                itemsRemoved+= element.getAmount();
-                p.getInventory().remove(element);
+        for (ItemStack element :  p.getInventory().getContents()) {
+            if (element !=null && item.getType() == element.getType() && !(element.getItemMeta().getDisplayName().contains("Enchanted"))) {
+                int count = element.getAmount();
+                if (count > (amount - itemsRemoved)) {
+                    element.setAmount(count - (amount - itemsRemoved));
+                    return;
+                } else {
+                    itemsRemoved += count;
+                    element.setAmount(0);
+                }
             }
         }
     }
